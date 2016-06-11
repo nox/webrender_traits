@@ -9,13 +9,15 @@ use types::{BorderRadius, BoxShadowClipMode, ImageRendering};
 use types::{ClipRegion, ColorF, FontKey, ImageKey, BorderSide};
 use webgl::{WebGLContextId};
 
-#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub struct BorderDisplayItem {
-    pub left: BorderSide,
-    pub right: BorderSide,
-    pub top: BorderSide,
-    pub bottom: BorderSide,
-    pub radius: BorderRadius,
+define_type! {
+    #[derive(Clone, Copy, Debug, PartialEq)]
+    pub struct BorderDisplayItem {
+        pub left: BorderSide,
+        pub right: BorderSide,
+        pub top: BorderSide,
+        pub bottom: BorderSide,
+        pub radius: BorderRadius,
+    }
 }
 
 impl BorderDisplayItem {
@@ -40,64 +42,79 @@ impl BorderDisplayItem {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub struct BoxShadowDisplayItem {
-    pub box_bounds: Rect<f32>,
-    pub offset: Point2D<f32>,
-    pub color: ColorF,
-    pub blur_radius: f32,
-    pub spread_radius: f32,
-    pub border_radius: f32,
-    pub clip_mode: BoxShadowClipMode,
+define_type! {
+    #[derive(Copy, Clone, Debug, PartialEq)]
+    pub struct BoxShadowDisplayItem {
+        pub box_bounds: Rect<f32>,
+        pub offset: Point2D<f32>,
+        pub color: ColorF,
+        pub blur_radius: f32,
+        pub spread_radius: f32,
+        pub border_radius: f32,
+        pub clip_mode: BoxShadowClipMode,
+    }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub struct GradientDisplayItem {
-    pub start_point: Point2D<f32>,
-    pub end_point: Point2D<f32>,
-    pub stops: ItemRange,
+define_type! {
+    #[derive(Copy, Clone, Debug, PartialEq)]
+    pub struct GradientDisplayItem {
+        pub start_point: Point2D<f32>,
+        pub end_point: Point2D<f32>,
+        pub stops: ItemRange,
+    }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub struct ImageDisplayItem {
-    pub image_key: ImageKey,
-    pub stretch_size: Size2D<f32>,
-    pub image_rendering: ImageRendering,
+define_type! {
+    #[derive(Copy, Clone, Debug, PartialEq)]
+    pub struct ImageDisplayItem {
+        pub image_key: ImageKey,
+        pub stretch_size: Size2D<f32>,
+        pub image_rendering: ImageRendering,
+    }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub struct WebGLDisplayItem {
-    pub context_id: WebGLContextId,
+define_type! {
+    #[derive(Copy, Clone, Debug, PartialEq)]
+    pub struct WebGLDisplayItem {
+        pub context_id: WebGLContextId,
+    }
+}
+define_type! {
+    #[derive(Copy, Clone, Debug, PartialEq)]
+    pub struct RectangleDisplayItem {
+        pub color: ColorF,
+    }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub struct RectangleDisplayItem {
-    pub color: ColorF,
+define_type! {
+    #[derive(Copy, Clone, Debug, PartialEq)]
+    pub struct TextDisplayItem {
+        pub glyphs: ItemRange,
+        pub font_key: FontKey,
+        pub size: Au,
+        pub color: ColorF,
+        pub blur_radius: Au,
+    }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub struct TextDisplayItem {
-    pub glyphs: ItemRange,
-    pub font_key: FontKey,
-    pub size: Au,
-    pub color: ColorF,
-    pub blur_radius: Au,
+define_type! {
+    #[derive(Clone, Copy, Debug, PartialEq)]
+    pub enum SpecificDisplayItem {
+        Rectangle(RectangleDisplayItem),
+        Text(TextDisplayItem),
+        Image(ImageDisplayItem),
+        WebGL(WebGLDisplayItem),
+        Border(BorderDisplayItem),
+        BoxShadow(BoxShadowDisplayItem),
+        Gradient(GradientDisplayItem),
+    }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub enum SpecificDisplayItem {
-    Rectangle(RectangleDisplayItem),
-    Text(TextDisplayItem),
-    Image(ImageDisplayItem),
-    WebGL(WebGLDisplayItem),
-    Border(BorderDisplayItem),
-    BoxShadow(BoxShadowDisplayItem),
-    Gradient(GradientDisplayItem),
-}
-
-#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub struct DisplayItem {
-    pub item: SpecificDisplayItem,
-    pub rect: Rect<f32>,
-    pub clip: ClipRegion,
+define_type! {
+    #[derive(Copy, Clone, Debug, PartialEq)]
+    pub struct DisplayItem {
+        pub item: SpecificDisplayItem,
+        pub rect: Rect<f32>,
+        pub clip: ClipRegion,
+    }
 }

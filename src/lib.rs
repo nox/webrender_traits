@@ -6,6 +6,7 @@
 #![feature(custom_derive)]
 #![feature(nonzero)]
 #![plugin(serde_macros)]
+#![recursion_limit="385"]
 
 extern crate app_units;
 extern crate byteorder;
@@ -17,6 +18,9 @@ extern crate offscreen_gl_context;
 extern crate serde;
 
 #[cfg(target_os = "macos")] extern crate core_graphics;
+
+#[macro_use]
+mod macros;
 
 mod api;
 mod display_item;

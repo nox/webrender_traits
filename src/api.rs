@@ -14,11 +14,15 @@ use types::{ColorF, DisplayListId, Epoch, FontKey, StackingContextId};
 use types::{ImageKey, ImageFormat, NativeFontHandle, PipelineId, ScrollLayerState};
 use webgl::{WebGLContextId, WebGLCommand};
 
-#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
-pub struct IdNamespace(pub u32);
+define_type! {
+    #[derive(Clone, Copy, Debug)]
+    pub struct IdNamespace(pub u32);
+}
 
-#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
-pub struct ResourceId(pub u32);
+define_type! {
+    #[derive(Clone, Copy, Debug)]
+    pub struct ResourceId(pub u32);
+}
 
 #[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize)]
 pub enum ScrollEventPhase {
@@ -63,10 +67,12 @@ pub enum ApiMsg {
     WebGLCommand(WebGLContextId, WebGLCommand),
 }
 
-#[derive(Serialize, Deserialize, Clone)]
-pub struct RenderApiSender {
-    api_sender: IpcSender<ApiMsg>,
-    payload_sender: IpcBytesSender,
+define_type! {
+    #[derive(Clone)]
+    pub struct RenderApiSender {
+        api_sender: IpcSender<ApiMsg>,
+        payload_sender: IpcBytesSender,
+    }
 }
 
 impl RenderApiSender {

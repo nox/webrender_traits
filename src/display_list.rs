@@ -14,48 +14,59 @@ use types::{ClipRegion, ColorF, ComplexClipRegion, FontKey, ImageKey, PipelineId
 use types::{DisplayListMode, GradientStop, StackingContextId, ImageRendering};
 use webgl::{WebGLContextId};
 
-#[derive(Copy, Clone, Serialize, Deserialize)]
-pub struct DrawListInfo {
-    pub items: ItemRange,
+define_type! {
+    #[derive(Copy, Clone)]
+    pub struct DrawListInfo {
+        pub items: ItemRange,
+    }
 }
 
-#[derive(Copy, Clone, Serialize, Deserialize)]
-pub struct StackingContextInfo {
-    pub id: StackingContextId,
+define_type! {
+    #[derive(Copy, Clone)]
+    pub struct StackingContextInfo {
+        pub id: StackingContextId,
+    }
 }
 
-#[derive(Copy, Clone, Debug, Serialize, Deserialize)]
-pub struct IframeInfo {
-    pub id: PipelineId,
-    pub bounds: Rect<f32>,
-    pub clip: ClipRegion,
+define_type! {
+    #[derive(Copy, Clone)]
+    pub struct IframeInfo {
+        pub id: PipelineId,
+        pub bounds: Rect<f32>,
+        pub clip: ClipRegion,
+    }
 }
 
-#[derive(Copy, Clone, Serialize, Deserialize)]
-pub enum SpecificDisplayListItem {
-    DrawList(DrawListInfo),
-    StackingContext(StackingContextInfo),
-    Iframe(IframeInfo),
+define_type! {
+    #[derive(Copy, Clone)]
+    pub enum SpecificDisplayListItem {
+        DrawList(DrawListInfo),
+        StackingContext(StackingContextInfo),
+        Iframe(IframeInfo),
+    }
 }
 
-#[derive(Copy, Clone, Serialize, Deserialize)]
-pub struct DisplayListItem {
-    pub specific: SpecificDisplayListItem,
+define_type! {
+    #[derive(Copy, Clone)]
+    pub struct DisplayListItem {
+        pub specific: SpecificDisplayListItem,
+    }
 }
 
-/// Describes the memory layout of a display list.
-///
-/// A display list consists of some number of display list items, followed by a number of display
-/// items.
-#[derive(Copy, Clone, Serialize, Deserialize)]
-pub struct BuiltDisplayListDescriptor {
-    pub mode: DisplayListMode,
-    pub has_stacking_contexts: bool,
-
-    /// The size in bytes of the display list items in this display list.
-    display_list_items_size: usize,
-    /// The size in bytes of the display items in this display list.
-    display_items_size: usize,
+define_type! {
+    /// Describes the memory layout of a display list.
+    ///
+    /// A display list consists of some number of display list items, followed
+    /// by a number of display items.
+    #[derive(Copy, Clone)]
+    pub struct BuiltDisplayListDescriptor {
+        pub mode: DisplayListMode,
+        pub has_stacking_contexts: bool,
+        /// The size in bytes of the display list items in this display list.
+        display_list_items_size: usize,
+        /// The size in bytes of the display items in this display list.
+        display_items_size: usize,
+    }
 }
 
 impl BuiltDisplayListDescriptor {
@@ -64,11 +75,13 @@ impl BuiltDisplayListDescriptor {
     }
 }
 
-/// A display list.
-#[derive(Clone, Serialize, Deserialize)]
-pub struct BuiltDisplayList {
-    data: Vec<u8>,
-    descriptor: BuiltDisplayListDescriptor,
+define_type! {
+    /// A display list.
+    #[derive(Clone)]
+    pub struct BuiltDisplayList {
+        data: Vec<u8>,
+        descriptor: BuiltDisplayListDescriptor,
+    }
 }
 
 impl BuiltDisplayList {
@@ -361,10 +374,12 @@ impl DisplayListBuilder {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub struct ItemRange {
-    pub start: usize,
-    pub length: usize,
+define_type! {
+    #[derive(Copy, Clone, Debug, PartialEq)]
+    pub struct ItemRange {
+        pub start: usize,
+        pub length: usize,
+    }
 }
 
 impl ItemRange {
@@ -470,16 +485,18 @@ impl AuxiliaryListsBuilder {
     }
 }
 
-/// Describes the memory layout of the auxiliary lists.
-///
-/// Auxiliary lists consist of some number of gradient stops, complex clip regions, filters, and
-/// glyph instances, in that order.
-#[derive(Copy, Clone, Debug, Serialize, Deserialize)]
-pub struct AuxiliaryListsDescriptor {
-    gradient_stops_size: usize,
-    complex_clip_regions_size: usize,
-    filters_size: usize,
-    glyph_instances_size: usize,
+define_type! {
+    /// Describes the memory layout of the auxiliary lists.
+    ///
+    /// Auxiliary lists consist of some number of gradient stops, complex clip regions, filters, and
+    /// glyph instances, in that order.
+    #[derive(Clone, Copy, Debug)]
+    pub struct AuxiliaryListsDescriptor {
+        gradient_stops_size: usize,
+        complex_clip_regions_size: usize,
+        filters_size: usize,
+        glyph_instances_size: usize,
+    }
 }
 
 impl AuxiliaryListsDescriptor {
@@ -489,12 +506,14 @@ impl AuxiliaryListsDescriptor {
     }
 }
 
-#[derive(Clone, Serialize, Deserialize)]
-pub struct AuxiliaryLists {
-    /// The concatenation of: gradient stops, complex clip regions, filters, and glyph instances,
-    /// in that order.
-    data: Vec<u8>,
-    descriptor: AuxiliaryListsDescriptor,
+define_type! {
+    #[derive(Clone)]
+    pub struct AuxiliaryLists {
+        /// The concatenation of: gradient stops, complex clip regions, filters, and glyph instances,
+        /// in that order.
+        data: Vec<u8>,
+        descriptor: AuxiliaryListsDescriptor,
+    }
 }
 
 impl AuxiliaryLists {

@@ -7,21 +7,22 @@ use euclid::{Matrix4, Rect};
 use types::{DisplayListId, FilterOp, MixBlendMode, ScrollLayerId, ScrollPolicy};
 use types::{ServoStackingContextId};
 
-#[derive(Serialize, Deserialize)]
-pub struct StackingContext {
-    pub servo_id: ServoStackingContextId,
-    pub scroll_layer_id: Option<ScrollLayerId>,
-    pub scroll_policy: ScrollPolicy,
-    pub bounds: Rect<f32>,
-    pub overflow: Rect<f32>,
-    pub z_index: i32,
-    pub display_lists: Vec<DisplayListId>,
-    pub transform: Matrix4,
-    pub perspective: Matrix4,
-    pub establishes_3d_context: bool,
-    pub mix_blend_mode: MixBlendMode,
-    pub filters: ItemRange,
-    pub has_stacking_contexts: bool,
+define_type! {
+    pub struct StackingContext {
+        pub servo_id: ServoStackingContextId,
+        pub scroll_layer_id: Option<ScrollLayerId>,
+        pub scroll_policy: ScrollPolicy,
+        pub bounds: Rect<f32>,
+        pub overflow: Rect<f32>,
+        pub z_index: i32,
+        pub display_lists: Vec<DisplayListId>,
+        pub transform: Matrix4,
+        pub perspective: Matrix4,
+        pub establishes_3d_context: bool,
+        pub mix_blend_mode: MixBlendMode,
+        pub filters: ItemRange,
+        pub has_stacking_contexts: bool,
+    }
 }
 
 impl StackingContext {

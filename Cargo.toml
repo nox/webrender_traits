@@ -8,8 +8,8 @@ git = "https://github.com/servo/ipc-channel"
 
 [dependencies]
 offscreen_gl_context = {version = "0.1.1", features = ["serde_serialization"]}
-app_units = {version = "0.2.1", features = ["plugins"]}
-euclid = {version = "0.6.2", features = ["plugins"]}
+app_units = "0.2.5"
+euclid = "0.6.8"
 gleam = "0.2.19"
 serde = {version = ">=0.6, <0.8", features = ["nightly"]}
 serde_macros = ">=0.6, <0.8"

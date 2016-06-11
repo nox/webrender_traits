@@ -6,14 +6,19 @@ use app_units::Au;
 use display_list::{AuxiliaryListsBuilder, ItemRange};
 use euclid::{Point2D, Rect, Size2D};
 
+#[cfg(not(target_os = "macos"))]
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
+
 #[cfg(target_os = "macos")] use core_graphics::font::CGFont;
 
-#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
-pub struct BorderRadius {
-    pub top_left: Size2D<f32>,
-    pub top_right: Size2D<f32>,
-    pub bottom_left: Size2D<f32>,
-    pub bottom_right: Size2D<f32>,
+define_type! {
+    #[derive(Copy, Clone, Debug, PartialEq)]
+    pub struct BorderRadius {
+        pub top_left: Size2D<f32>,
+        pub top_right: Size2D<f32>,
+        pub bottom_left: Size2D<f32>,
+        pub bottom_right: Size2D<f32>,
+    }
 }
 
 impl BorderRadius {
@@ -36,38 +41,46 @@ impl BorderRadius {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub struct BorderSide {
-    pub width: f32,
-    pub color: ColorF,
-    pub style: BorderStyle,
+define_type! {
+    #[derive(Clone, Copy, Debug, PartialEq)]
+    pub struct BorderSide {
+        pub width: f32,
+        pub color: ColorF,
+        pub style: BorderStyle,
+    }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
-pub enum BorderStyle {
-    None,
-    Solid,
-    Double,
-    Dotted,
-    Dashed,
-    Hidden,
-    Groove,
-    Ridge,
-    Inset,
-    Outset,
+define_type! {
+    #[derive(Clone, Copy, Debug, PartialEq)]
+    pub enum BorderStyle {
+        None,
+        Solid,
+        Double,
+        Dotted,
+        Dashed,
+        Hidden,
+        Groove,
+        Ridge,
+        Inset,
+        Outset,
+    }
 }
 
-#[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
-pub enum BoxShadowClipMode {
-    None,
-    Outset,
-    Inset,
+define_type! {
+    #[derive(Clone, Copy, Debug, PartialEq)]
+    pub enum BoxShadowClipMode {
+        None,
+        Outset,
+        Inset,
+    }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub struct ClipRegion {
-    pub main: Rect<f32>,
-    pub complex: ItemRange,
+define_type! {
+    #[derive(Clone, Copy, Debug, PartialEq)]
+    pub struct ClipRegion {
+        pub main: Rect<f32>,
+        pub complex: ItemRange,
+    }
 }
 
 impl ClipRegion {
@@ -82,12 +95,14 @@ impl ClipRegion {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
-pub struct ComplexClipRegion {
-    /// The boundaries of the rectangle.
-    pub rect: Rect<f32>,
-    /// Border radii of this rectangle.
-    pub radii: BorderRadius,
+define_type! {
+    #[derive(Copy, Clone, Debug, PartialEq)]
+    pub struct ComplexClipRegion {
+        /// The boundaries of the rectangle.
+        pub rect: Rect<f32>,
+        /// Border radii of this rectangle.
+        pub radii: BorderRadius,
+    }
 }
 
 impl ComplexClipRegion {
@@ -99,12 +114,14 @@ impl ComplexClipRegion {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
-pub struct ColorF {
-    pub r: f32,
-    pub g: f32,
-    pub b: f32,
-    pub a: f32,
+define_type! {
+    #[derive(Copy, Clone, Debug, PartialEq)]
+    pub struct ColorF {
+        pub r: f32,
+        pub g: f32,
+        pub b: f32,
+        pub a: f32,
+    }
 }
 
 impl ColorF {
@@ -127,47 +144,63 @@ impl ColorF {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub struct StackingContextId(pub u32, pub u32);
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub struct ServoStackingContextId(pub FragmentType, pub usize);
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub enum FragmentType {
-    FragmentBody,
-    BeforePseudoContent,
-    AfterPseudoContent,
+define_type! {
+    #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+    pub struct StackingContextId(pub u32, pub u32);
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub enum DisplayListMode {
-    Default,
-    PseudoFloat,
-    PseudoPositionedContent,
+define_type! {
+    #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+    pub struct ServoStackingContextId(pub FragmentType, pub usize);
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub struct DisplayListId(pub u32, pub u32);
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
-pub struct Epoch(pub u32);
-
-#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
-pub enum FilterOp {
-    Blur(Au),
-    Brightness(f32),
-    Contrast(f32),
-    Grayscale(f32),
-    HueRotate(f32),
-    Invert(f32),
-    Opacity(f32),
-    Saturate(f32),
-    Sepia(f32),
+define_type! {
+    #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+    pub enum FragmentType {
+        FragmentBody,
+        BeforePseudoContent,
+        AfterPseudoContent,
+    }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Serialize, Deserialize)]
-pub struct FontKey(u32, u32);
+define_type! {
+    #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+    pub enum DisplayListMode {
+        Default,
+        PseudoFloat,
+        PseudoPositionedContent,
+    }
+}
+
+define_type! {
+    #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+    pub struct DisplayListId(pub u32, pub u32);
+}
+
+define_type! {
+    #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+    pub struct Epoch(pub u32);
+}
+
+define_type! {
+    #[derive(Clone, Copy, Debug)]
+    pub enum FilterOp {
+        Blur(Au),
+        Brightness(f32),
+        Contrast(f32),
+        Grayscale(f32),
+        HueRotate(f32),
+        Invert(f32),
+        Opacity(f32),
+        Saturate(f32),
+        Sepia(f32),
+    }
+}
+
+define_type! {
+    #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+    pub struct FontKey(u32, u32);
+}
 
 impl FontKey {
     pub fn new(key0: u32, key1: u32) -> FontKey {
@@ -175,36 +208,46 @@ impl FontKey {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub struct GlyphInstance {
-    pub index: u32,
-    pub x: f32,
-    pub y: f32,
+define_type! {
+    #[derive(Clone, Copy, Debug, PartialEq)]
+    pub struct GlyphInstance {
+        pub index: u32,
+        pub x: f32,
+        pub y: f32,
+    }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub struct GradientStop {
-    pub offset: f32,
-    pub color: ColorF,
+define_type! {
+    #[derive(Clone, Copy, Debug, PartialEq)]
+    pub struct GradientStop {
+        pub offset: f32,
+        pub color: ColorF,
+    }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub enum ImageFormat {
-    Invalid,
-    A8,
-    RGB8,
-    RGBA8,
+define_type! {
+    #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+    pub enum ImageFormat {
+        Invalid,
+        A8,
+        RGB8,
+        RGBA8,
+    }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub enum ImageRendering {
-    Auto,
-    CrispEdges,
-    Pixelated,
+define_type! {
+    #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+    pub enum ImageRendering {
+        Auto,
+        CrispEdges,
+        Pixelated,
+    }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Serialize, Deserialize)]
-pub struct ImageKey(u32, u32);
+define_type! {
+    #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+    pub struct ImageKey(u32, u32);
+}
 
 impl ImageKey {
     pub fn new(key0: u32, key1: u32) -> ImageKey {
@@ -212,24 +255,26 @@ impl ImageKey {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Serialize, Deserialize)]
-pub enum MixBlendMode {
-    Normal,
-    Multiply,
-    Screen,
-    Overlay,
-    Darken,
-    Lighten,
-    ColorDodge,
-    ColorBurn,
-    HardLight,
-    SoftLight,
-    Difference,
-    Exclusion,
-    Hue,
-    Saturation,
-    Color,
-    Luminosity,
+define_type! {
+    #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+    pub enum MixBlendMode {
+        Normal,
+        Multiply,
+        Screen,
+        Overlay,
+        Darken,
+        Lighten,
+        ColorDodge,
+        ColorBurn,
+        HardLight,
+        SoftLight,
+        Difference,
+        Exclusion,
+        Hue,
+        Saturation,
+        Color,
+        Luminosity,
+    }
 }
 
 #[cfg(target_os = "macos")]
@@ -237,11 +282,31 @@ pub type NativeFontHandle = CGFont;
 
 /// Native fonts are not used on Linux; all fonts are raw.
 #[cfg(not(target_os = "macos"))]
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone)]
 pub struct NativeFontHandle;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub struct PipelineId(pub u32, pub u32);
+#[cfg(not(target_os = "macos"))]
+impl Deserialize for NativeFontHandle {
+    fn deserialize<D>(deserializer: &mut D) -> Result<Self, D::Error>
+        where D: Deserializer
+    {
+        deserializer.deserialize_unit().map(|_| NativeFontHandle)
+    }
+}
+
+#[cfg(not(target_os = "macos"))]
+impl Serialize for NativeFontHandle {
+    fn serialize<S>(&self, serializer: &mut S) -> Result<(), S::Error>
+        where S: Serializer
+    {
+        serializer.serialize_unit()
+    }
+}
+
+define_type! {
+    #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+    pub struct PipelineId(pub u32, pub u32);
+}
 
 pub trait RenderNotifier : Send {
     fn new_frame_ready(&mut self);
@@ -250,16 +315,20 @@ pub trait RenderNotifier : Send {
                              size: Option<Size2D<f32>>);
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub enum ScrollLayerInfo {
-    Fixed,
-    Scrollable(usize)
+define_type! {
+    #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+    pub enum ScrollLayerInfo {
+        Fixed,
+        Scrollable(usize),
+    }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub struct ScrollLayerId {
-    pub pipeline_id: PipelineId,
-    pub info: ScrollLayerInfo,
+define_type! {
+    #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+    pub struct ScrollLayerId {
+        pub pipeline_id: PipelineId,
+        pub info: ScrollLayerInfo,
+    }
 }
 
 impl ScrollLayerId {
@@ -278,16 +347,20 @@ impl ScrollLayerId {
     }
 }
 
-#[derive(Clone, PartialEq, Eq, Copy, Deserialize, Serialize, Debug)]
-pub enum ScrollPolicy {
-    Scrollable,
-    Fixed,
+define_type! {
+    #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+    pub enum ScrollPolicy {
+        Scrollable,
+        Fixed,
+    }
 }
 
-#[derive(Serialize, Deserialize, Clone)]
-pub struct ScrollLayerState {
-    pub pipeline_id: PipelineId,
-    pub stacking_context_id: ServoStackingContextId,
-    pub scroll_offset: Point2D<f32>,
+define_type! {
+    #[derive(Clone)]
+    pub struct ScrollLayerState {
+        pub pipeline_id: PipelineId,
+        pub stacking_context_id: ServoStackingContextId,
+        pub scroll_offset: Point2D<f32>,
+    }
 }
 
